@@ -1,0 +1,144 @@
+% --------------------------------------------------------------------------
+% Formatvorlage fuer die Bacheloarbeit an der DHBW Karlsruhe, angelehnt an
+% eine Vorlage von Danis Hamann auf Basis von Stefan Macke
+% --------------------------------------------------------------------------
+%   Angelehnt an die Vorlage von Denis Hamann auf Basis von Stefan Macke. 14.02.2011 / 12.07.2007
+%   Download unter:
+%   http://blog.stefan-macke.com
+%   http://code.google.com/p/snmptrack/source/browse/trunk/doc/Latex/?r=550
+%
+%   erstellt von Julius Hacker
+%   Email: info@julius-hacker.de
+
+
+% Dokumentenkopf -----------------------------------------------------------
+%   Diese Vorlage basiert auf "scrreprt" aus dem koma-script.
+%    Die Option draft sollte beim fertigen Dokument ausgeschaltet werden.
+% --------------------------------------------------------------------------
+\documentclass[
+  pdftex,
+  fontsize=12pt,          % Schriftgroesse
+  DIV10,                  % Angabe bzgl Bestimmung der Seitenabstaende
+  ngerman,                % fuer Umlaute, Silbentrennung etc.
+  paper=a4,               % Papierformat
+  twoside=false,          % einseitiges Dokument
+  titlepage,              % es wird eine Titelseite verwendet
+  parskip=half,           % Abstand zwischen Absaetzen (halbe Zeile)
+  headings=normal,        % Groesse der Ueberschriften verkleinern
+  liststotoc,             % Verzeichnisse im Inhaltsverzeichnis auffuehren
+  bibtotoc,               % Literaturverzeichnis im Inhaltsverzeichnis auffuehren
+  index=totoc,            % Index im Inhaltsverzeichnis auffuehren
+  captions=tableheading,  % Beschriftung von Tabellen oberhalb ausgeben
+  draft                   % Status des Dokuments (final/draft)
+]{scrreprt}
+
+
+\usepackage[utf8]{inputenc} % UTF-8 als Zeichenkodierung der Quelldateien festlegen. Wichtig wg Umlauten
+\usepackage{tgheros}
+\renewcommand*\familydefault{\sfdefault}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp} % Euro-Zeichen etc.
+
+\input{_Meta}
+\input{Packages}
+
+\makeindex
+
+\input{Seitenstil}
+\input{Silbentrennung}
+
+
+% Beginn des eigentlichen Dokuments
+\begin{document}
+
+% auch subsubsection nummerieren
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+
+% keine Kopf-/Fusszeilen bei Deckblatt und Abstract
+\ofoot{}
+\ohead{}
+
+\begingroup 
+\setlength{\leftmargin}{-20mm}
+\setlength{\rightmargin}{10mm}
+\setlength{\topmargin}{-20mm}
+\setlength{\footskip}{-10mm}
+\include{Deckblatt}
+\endgroup
+
+\ohead{Seite \thepage}
+%\ofoot{\pagemark}
+
+% Seitennummerierung -------------------------------------------------------
+%    Vor dem Hauptteil werden die Seiten in grossen roemischen Ziffern 
+%    nummeriert...
+% --------------------------------------------------------------------------
+\pagenumbering{Roman}
+
+%Ueberschrifthack
+\parindent 0pt
+\renewcommand*{\chapterheadstartvskip}{\vspace*{0pt}}
+
+
+\include{Inhalt/Sperrvermerk} % Sperrvermerk - wichtig bei internen Informationen aus der Firma!
+\include{Inhalt/Erklaerung}   % Selbstaendigkeitserklaerung 
+
+
+%Inhaltsverzeichnis einbinden
+\tableofcontents 
+\addtocontents{toc}{\protect\thispagestyle{scrheadings}}
+
+
+
+%Hack fuer listoffigures
+\begingroup
+\renewcommand*{\addvspace}[1]{}
+\newpage
+\renewcommand{\cftfigpresnum}{Abb. }
+\renewcommand{\cfttabpresnum}{Tab. }
+\setlength{\cftfignumwidth}{2cm}
+\setlength{\cfttabnumwidth}{2cm}
+\addcontentsline{toc}{chapter}{\listfigurename}
+\listoffigures
+\addtocontents{lof}{\protect\thispagestyle{scrheadings}}
+\newpage
+\endgroup
+
+% Abbildungsverzeichnis
+\begingroup
+\ihead{Abk\"urzungsverzeichnis}
+\include{Inhalt/Abkuerzungsverzeichnis}
+\endgroup
+
+%\begingroup
+%\addcontentsline{toc}{chapter}{\listtablename}
+%\listoftables          % Tabellenverzeichnis
+%\endgroup
+%\renewcommand{\lstlistlistingname}{Verzeichnis der Listings}
+%\lstlistoflistings      % Listings-Verzeichnis
+
+% ...danach in normalen arabischen Ziffern ---------------------------------
+\clearpage
+\clearpage
+\pagenumbering{arabic}
+
+
+% Inhalt
+\include{Inhalt/Einleitung}
+\include{Inhalt/Kapitel1}
+\include{Inhalt/Kapitel2}
+\include{Inhalt/Fazit}
+
+\pagenumbering{Roman}
+\setcounter{page}{7}
+
+
+% Literaturverzeichnis
+\bibliography{Bibliographie}
+\bibliographystyle{jurecocst}
+
+\ihead{Quellen/Literaturverzeichnis}
+
+
+\end{document}

@@ -1,0 +1,48 @@
+% Zeilenabstand ------------------------------------------------------------
+%\onehalfspacing
+\setstretch{1,5}
+
+% Seitenraender -------------------------------------------------------------
+\geometry{paper=a4paper,left=30mm,right=25mm,top=40mm, bottom=37mm, footskip=10mm}
+
+
+% Kopf- und Fusszeilen ------------------------------------------------------
+\pagestyle{scrheadings}
+
+% Kopf- und Fusszeile auch auf Kapitelanfangsseiten -------------------------
+\renewcommand*{\chapterpagestyle}{scrheadings}
+
+% Schriftform der Kopfzeile -------------------------------------------------
+\renewcommand{\headfont}{\normalfont}
+
+% Kopfzeile -----------------------------------------------------------------
+\ihead{\headmark} %\small{\untertitel}
+\chead{\hspace{1mm}}
+\ohead{Seite \thepage}
+\setlength{\headheight}{21mm} % Hhe der Kopfzeile
+\setheadsepline[text]{0.4pt} % Trennlinie unter Kopfzeile
+
+% Fusszeile -----------------------------------------------------------------
+%\ifoot{\copyright\ \autor}
+\cfoot{\hspace{1mm}}
+\ofoot{\hspace{1mm}}
+
+
+%Abbildungen
+%Figures anpassung
+\makeatletter
+\@removefromreset{figure}{chapter}
+\renewcommand*\thefigure{\@arabic\c@figure}
+\makeatother
+
+
+% erzeugt ein wenig mehr Platz hinter einem Punkt --------------------------
+\frenchspacing 
+
+% Schusterjungen und Hurenkinder vermeiden
+\clubpenalty = 10000
+\widowpenalty = 10000 
+\displaywidowpenalty = 10000
+
+% Fussnoten fortlaufend durchnummerieren ------------------------------------
+\counterwithout{footnote}{chapter}

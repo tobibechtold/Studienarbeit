@@ -1,0 +1,124 @@
+% Anpassung des Seitenlayouts ----------------------------------------------
+%   siehe Seitenstil.tex
+% --------------------------------------------------------------------------
+\usepackage[
+  automark,     % Kapitelangaben in Kopfzeile automatisch erstellen
+  headsepline,  % Trennlinie unter Kopfzeile
+  ilines        % Trennlinie linksbndig ausrichten
+]{scrpage2}
+
+
+% Anpassung an Landessprache -----------------------------------------------
+%   Verwendet globale Option german siehe \documentclass
+% --------------------------------------------------------------------------
+\usepackage{babel}
+
+\usepackage[printonlyused]{acronym}
+
+% Grafiken -----------------------------------------------------------------
+%     Einbinden von Grafiken [draft oder final]
+%     Option [draft] bindet Bilder nicht ein - auch globale Option
+% --------------------------------------------------------------------------
+\usepackage[dvips,final]{graphicx}
+\graphicspath{{Bilder/}} % Dort liegen die Bilder des Dokuments
+
+
+% Fuer Index-Ausgabe; \printindex -------------------------------------------
+\usepackage{makeidx}
+
+% Einfache Definition der Zeilenabstaende und Seitenrnder etc. -------------
+\usepackage{setspace}
+\usepackage{geometry}
+
+
+\usepackage{xcolor} 
+\definecolor{hellgelb}{rgb}{1,1,0.9}
+\definecolor{colKeys}{rgb}{0,0,1}
+\definecolor{colIdentifier}{rgb}{0,0,0}
+\definecolor{colComments}{rgb}{1,0,0}
+\definecolor{colString}{rgb}{0,0.5,0}
+
+% Lange URLs umbrechen etc. -------------------------------------------------
+\usepackage{url}
+
+\usepackage{footnote} % Ermoeglicht Fussnoten in gleitenden Umgebungen
+\makesavenoteenv[figure*]{figure}
+
+\pdfcompresslevel=1
+%\pdfimageresolution=1200
+%\pdfpkresolution=1200
+
+% Zum fortlaufenden Durchnummerieren der Fussnoten ---------------------------
+\usepackage{chngcntr}
+
+\usepackage{caption}
+
+\usepackage{tocloft}
+
+\newcommand{\myappendix}[1]{%
+  \refstepcounter{appendix}%
+  \section*{\theappendix\space #1}%
+  \addcontentsline{app}{appendix}{\protect\numberline{\theappendix}#1}%
+  \par
+}
+
+\newcommand{\subappendix}[1]{%
+  \refstepcounter{subappendix}%
+  \subsection*{\thesubappendix\space #1}%
+  \addcontentsline{app}{subappendix}{\protect\numberline{\thesubappendix}#1}%
+}
+
+% Formatierung von Listen ndern
+\usepackage{paralist}
+% Standardeinstellungen:
+% \setdefaultleftmargin{2.5em}{2.2em}{1.87em}{1.7em}{1em}{1em}
+
+%Zeilenabstand
+\renewcommand{\baselinestretch}{1.5}\normalsize
+
+%Schriftart
+\renewcommand{\familydefault}{\sfdefault}
+
+
+\usepackage[see, commabeforerest, authorformat=year]{jurabib}
+\renewcommand*{\bibbtasep}{; } % bta = between two authors sep
+\renewcommand*{\bibbfsasep}{; } % bfsa = between first and second author sep
+\renewcommand*{\bibbstasep}{; }% bsta = between second and third author sep
+\renewcommand*{\bibatsep}{, }
+\DeclareRobustCommand{\jbaensep}{,}
+
+% PDF-Optionen --------------------------------------------------------------
+\usepackage[
+bookmarks,
+bookmarksopen=true,
+pdftitle={\titel},
+pdfauthor={\autor},
+pdfcreator={\autor},
+pdfsubject={\titel},
+pdfkeywords={\titel},
+pdfmenubar=true,
+colorlinks=true,
+linkcolor=black, % einfache interne Verknpfungen
+anchorcolor=black,% Ankertext
+citecolor=black, % Verweise auf Literaturverzeichniseintrge im Text
+filecolor=black, % Verknpfungen, die lokale Dateien ffnen
+menucolor=black, % Acrobat-Menpunkte
+urlcolor=black,
+plainpages=false,% zur korrekten Erstellung der Bookmarks
+pdfpagelabels,% zur korrekten Erstellung der Bookmarks
+hypertexnames=false,% zur korrekten Erstellung der Bookmarks
+linktocpage % Seitenzahlen anstatt Text im Inhaltsverzeichnis verlinken
+]{hyperref}
+
+
+% Algorithmen-Formattierung
+%\usepackage{algorithm}
+\usepackage[final]{listings}
+    \lstset{
+      breaklines=true,                                     % line wrapping on
+%      frame=ltrb,
+      framesep=5pt,
+      basicstyle=\normalsize,
+      stringstyle=\ttfamily,
+      showstringspaces=ture
+    }
