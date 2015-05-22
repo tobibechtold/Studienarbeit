@@ -84,7 +84,6 @@ public class ReadmoreServer extends Application {
 		forumRestlet = new ForumRestlet();
 		beitragRestlet = new BeitragRestlet();
 	}
-	
 	public static void main(String[] args) throws Exception {
 		Component component = new Component();
 		component.getServers().add(Protocol.HTTP, 8182);
@@ -92,7 +91,6 @@ public class ReadmoreServer extends Application {
 		component.getDefaultHost().attach("", server);
 		component.start();
 	}
-	
 	public Restlet createInboundRoot() {
 	    Router router = new Router(getContext());
 	    router.attach("/threads", threadsRestlet);
@@ -108,7 +106,6 @@ die Adressen auf die die einzelnen Restlets reagieren festgelegt. Nachfolgend
 ein einfaches \Fachbegriff{Restlet}
 \begin{lstlisting}[caption=Ein einfaches Restlet, label=restlet]
 public class ForumRestlet extends Restlet {
-	
 	@Override
     public void handle(Request request, Response response) {
 		List<Forum> forum = getForum();
@@ -117,24 +114,38 @@ public class ForumRestlet extends Restlet {
         message = gson.toJson(forum);
         response.setEntity(message, MediaType.TEXT_PLAIN);
     }
-
 	private List<Forum> getForum() {
 		ForenParser tp = new ForenParser();
 		return tp.getForen();
 	}
-
 }
 \end{lstlisting}
 Die Methode \Code{handle(Request request, Response response)} legt beim Aufruf
 des Restlets die \Fachbegriff{Response}, also die Antwort des Servers fest die
 beim Aufruf zurückgegeben wird.
 \subsection{Gson}
-
-\section{Technische Möglichkeiten}
-Evaluierung der technischen Möglichkeiten
-
+Das von Google entwickelte Framework \Fachbegriff{Gson} bietet die Möglichkeit
+Java-Objekte vollautomatisch in das \Fachbegriff{JSON}-Format zu übertragen und
+umgekeht \Fachbegriff{JSON}-Objekte in existierende Java-Objekte zu
+transferieren.\footnote{https://sites.google.com/site/gson/gson-user-guide} 
+\Fachbegriff{Gson} wird auf der Serverkomponente zur Erstellung der Antwort auf
+GET Anfragen verwendet. 
 \section{Konzeption des Servers}
-Wie sieht die Kommunikation aus: zum einen mit readmore zum anderen mit der app
-
+Die Serverkomponente der Readmore App dient in erster Linie dem Auslesen der
+sichtbaren Informationen im Forum von readmore. Dazu gehören die verschiedenen
+Foren die in verschiedene Kategorien unterteilt sind, die Threads, also die
+Einträge in jedem gewählten Forum und die einzelnen Beiträge auf jeder Seite
+eines gewünschten Threads. 
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{Bilder/ftb.jpg}
+\caption[Foren, Threads und Beiträge auf Readmore]{Foren, Threads und Beiträge auf Readmore\protect\footnote{eigene Darstellung.} }
+\label{dminfo}
+\end{figure*}
+Die App soll also nicht direkt mit readmore.de kommunizieren sondern bekommt
+alle zur Anzeige des Forums relevanten Informationen in einem schnell zu
+verarbeitenden Format. Dieses Vorgehen legt das aufwendige traversieren durch
+den HTML-Code von readmore.de auf den Server um, und spart somit wertvolle
+Ressourcen des Mobilgeräts ein.
 \section{Anforderungen an die Oberfläche}
 Use Cases, Mockups der Oberfläche usw.
