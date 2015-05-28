@@ -42,7 +42,7 @@ und Tastendrücke des Benutzers. Sollte also ein Benutzer beispielsweise den
 \Fachbegriff{Zurück} Button auf seinem Gerät drücken, so wechselt die App auf
 die zuvor angezeigte \Fachbegriff{Activity}. \Fachbegriff{Activities} können
 sich auch gegenseitig aufrufen und stellen somit
-den Navigationsfluss innerhalb der App sicher.\footcite{künneth2012android}
+den Navigationsfluss innerhalb der App sicher.\footcite{kuenneth2012android}
 
 \section{Eingesetzte Technologien}
 \subsection{Jsoup}
@@ -146,6 +146,85 @@ Die App soll also nicht direkt mit readmore.de kommunizieren sondern bekommt
 alle zur Anzeige des Forums relevanten Informationen in einem schnell zu
 verarbeitenden Format. Dieses Vorgehen legt das aufwendige traversieren durch
 den HTML-Code von readmore.de auf den Server um, und spart somit wertvolle
-Ressourcen des Mobilgeräts ein.
+Ressourcen des Mobilgeräts ein. Der Server analysiert also das HTML der
+gewünschten Forenseite auf readmore.de und extrahiert die relevanten
+Informationen mithilfe von \Fachbegriff{Jsoup}. Ein vor allem im Android Bereich
+sehr verbreitetes und gut verarbeitbares Format um strukturierte Daten darzustellen, 
+stellt \Fachbegriff{JSON} dar. Daher erfolgt die Rückgabe der Daten vom Server 
+im JSON Format. Bei der Rückgabe wird zwischen drei
+verschiedenen Listen mit drei verschiedenen Datentypen unterschieden. \\
+\begin{enumerate}
+  \item Foren: Eine Liste mit allen Foren des readmore.de Forums
+  \item Threads: Eine Liste mit allen Threads eines bestimmten Forums
+  \item Beiträge: Eine Liste mit allen Beiträgen der gewählten Seite eines
+  Threads
+\end{enumerate}
+Informationen die bei der Anfrage der Forenliste weitergegeben werden, sind:
+\begin{itemize}
+  \item Der Titel des Forums
+  \item Die ID des Forums
+  \item Die ID der Kategorie in der das Forum eingeteilt ist
+  \item Die Beschreibung des Forums
+\end{itemize}
+Wird die Liste der Threads eines bestimmten Forums angefordert, werden folgende
+Informationen weitergegeben:
+\begin{itemize}
+  \item Der Titel des Threads
+  \item Die ID des Threads
+  \item Die ID des Forums in dem der Thread sich befindet
+  \item Die Anzahl der Seiten des Threads
+\end{itemize}
+Sollen alle Beiträge eines Threads zurückgegeben werden, enthält die Antwort des
+Servers eine Liste mit \Code{Beitrag} Objekten. Diese Objekte enthalten folgende
+Attribute:
+\begin{itemize} 
+  \item Der Inhalt des Beitrags
+  \item Der Ersteller des Beitrags welcher sich aufteilt in:
+  \begin{itemize}
+    \item Die ID des Benutzers
+    \item Der Anzeigename des Benutzers
+    \item Der Link zum Avatar des Benutzers
+  \end{itemize}
+\end{itemize}
+Wie in den Auflistungen zu sehen, werden hier nur die wesentlichen Informationen
+über den Server übertragen. Da die übertragenen Daten nur im Textformat
+übertragen werden, bleibt die übertragene Datenmenge minimal. Dadurch kann das
+Laden von Foren, Threads und Beiträgen auf dem Mobiltelefon ohne zeitaufwändige
+Ladezeiten geschehen. Der Zugriff auf den Server erfolgt über einen HTTP GET
+Request. Hierbei werden die erforderlichen Parameter an die URL des Requests
+angehängt. Wird beispielsweise eine Liste mit den Threads eines Forums
+abgefragt, werden die Paramter \Code{forumId} und \Code{categoryId} an die URL
+des GET Requests angehängt.
 \section{Anforderungen an die Oberfläche}
-Use Cases, Mockups der Oberfläche usw.
+Die große Herausforderung in dieser Studienarbeit liegt daran, die Informationen
+des Forums in einem schnell verarbeitbaren Format darzustellen. Daher sollen
+zunächst nur die wichtigsten Funktionen des Forums in der App abgebildet werden.
+Zu den wichtigsten Funktionen zählen:
+\begin{itemize}
+  \item Die Anzeige aller Foren, Threads und Beiträge des gesamten Forums
+  (lesen des Forums)
+  \item Login aus der App heraus direkt via readmore.de
+  \item Antworten in Threads aus der App heraus verfassen
+  \item korrekte Darstellung des im Forum verwendeten BBCode, also der
+  Formatierung für Zitate, Formatierung, Bilder und Links in den Beiträgen
+\end{itemize}
+Die höchste Priorität hat logischerweise das Lesen des Forums. Die Foren,
+Threads und Beiträge sollen in drei unterschiedlichen Listen angezeigt werden.
+Wird auf ein Eintrag in der Liste der Foren geklickt soll die entsprechende
+Liste mit den Threads angezeigt werden. Ein Klick auf einen Thread soll die
+Beiträge der ersten Seite des gewählten Threads darstellen. Außerdem sollen
+innerhalb eines Threads die verfügbaren Seiten auswählbar sein. Die Darstellung
+soll mit nativen Android Komponenten erfolgen.
+Nachfolgende Grafik stellt das gewünschte Verhalten dar:
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{Bilder/mockups_oberflaeche.png}
+\caption[Mockups der verschiedene Oberflächen der App]{Mockups der verschiedene Oberflächen der App
+\protect\footnote{eigene Darstellung.} }
+\label{dminfo}
+\end{figure*}
+Die Mockups enthalten in der Forenübersicht und der Threadübersicht jeweils
+normal gedruckte Titel und fett gedruckte Titel. Falls der Benutzer in der App
+eingeloggt ist, sollen fett gedruckte Titel ungelesene Threads oder Beiträge
+symbolisieren. Normal gedruckte Titel symbolisieren, dass alle Beiträge und
+Threads bereits gelesen wurden.
