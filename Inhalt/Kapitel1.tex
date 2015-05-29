@@ -44,6 +44,84 @@ die zuvor angezeigte \Fachbegriff{Activity}. \Fachbegriff{Activities} können
 sich auch gegenseitig aufrufen und stellen somit
 den Navigationsfluss innerhalb der App sicher.\footcite{kuenneth2012android}
 
+\section{Verschiedene Lösungsmöglichkeiten}
+Die Anzeige des readmore.de Forums in einer Android App ist über mehrere Wege
+möglich. In Vorüberlegungen zu dieser Arbeit wurden zwei sinnvolle Möglichkeiten
+ausgewählt, die in den folgenden Unterkapiteln gegeneinander abgewogen werden.
+Die erste Möglichkeit wäre die Manipulation der bestehenden Webseite mithilfe
+von JavaScript und der Veränderung des CSS der Seite, die zweite Möglichkeit
+wäre die Entwicklung einer eigenen serverseitigen API die die notwendigen
+Informationen ausliest und über eine Server-Schnittstelle bereitstellt.
+Möglichkeit zwei beeinhaltet die Entwicklung der App mit nativen Android
+Komponenten.
+\subsection{Manipulation der bestehenden Webseite}
+Android bietet mit der \Fachbegriff{WebView} Komponente einen vollwertigen
+Browser, der in einer Android App eingebettet werden kann. Dieser bietet auch
+die Möglichkeit im Vollbildmodus zu laufen, sodass der Benutzer trotzdem das
+Gefühl hat eine vollwertige App zu benutzen. Mithilfe von JavaScript ist es
+möglich nur die für die mobile Nutzung notwendigen Komponenten einer Webseite
+anzuzeigen. Durch die Veränderung des der Webseite zugrundeliegenden CSS, ist es
+möglich das Design und die Anordnung der Komponenten für eine mobile Ansicht
+anzupassen. \\
+Vorteile der Lösung:
+\begin{itemize}
+  \item Die Oberfläche der App müsste nicht neu entwickelt werden. Die
+  bestehenden Komponenten der Webseite müssen nur angepasst werden.
+  \item Zeitersparnis durch die indirekte Verwendung der API von readmore.de.
+  Login und erstellen von Posts findet direkt über die Webseite statt.
+\end{itemize}
+Nachteile der Lösung:
+\begin{itemize}
+  \item Komplizierte JavaScript Operationen um gewünschte Elemente auszuwählen.
+  \item Obwohl nur die wichtigen Komponenten angezeigt werden, muss im
+  Hintergrund die gesamte Webseite geladen werden. Dies führt zum einen zu einem
+  erhöhten Datenverbrauch für Nutzer im Mobilfunknetzt, zum Anderen entstehen
+  bei langsamen mobilen Datenverbindungen sehr hohe Ladezeiten für den Benutzer
+  der App.
+  \item Trotz der Anpassung auf eine mobile Webseite, fühlt sich die Benutzung
+  einer WebView nicht wie eine native App an. Die Usability ist mit dieser
+  Lösung zwar besser als zuvor, jedoch nicht auf dem Niveau einer nativen
+  Android App.
+  \item Komplexe JavaScript Operationen können auch mit einer schnellen
+  Datenverbindung spürbare Verzögerungen für den Benutzer mit sich bringen.
+\end{itemize}
+\subsection{Entwicklung einer eigenen serverseitigen API}
+Um die Daten im Forum von readmore.de wie z.B Foren, Threads und Beiträge
+auszulesen soll eine eigene API entwickelt werden. Diese soll auf Anfrage die
+gewünschten Informationen in einem weiterverarbeitbarem Format, wie z.B. JSON,
+zur Verfügung stellen. Da die Analyse des HTML-Quellcodes der angeforderten
+Seite auf dem Mobiltelefon unnötigen Datenverbrauch generieren würde, soll diese
+API auf einem von überall aus erreichbaren Server laufen. Somit ist auch die
+Wiederverwendbarkeit der API für andere Plattformen gewährleistet. Die App
+soll im Anschluss mit nativen Android Komponenten entwickelt werden. \\
+Vorteile der Lösung:
+\begin{itemize}
+  \item Entwicklung der App mit nativen Android Komponenten. Dadurch sehr gute
+  Usability für den Benutzer.
+  \item Da nur die wesentlichen Informationen an das Mobiltelefon übertragen
+  werden, bleiben der Datenverbrauch sowie die Ladezeiten sehr niedrig.
+  \item Entwickelte API setzt auf das weit verbreitete Format JSON. Dadurch ist
+  die API plattformunabhängig einsetzbar und kann ohne Probleme weiterverwendet
+  werden.
+  \item Ressourcenauslastung des Mobiltelefons bleibt durch den Einsatz von
+  nativen und schlanken Android Komponenten niedriger als in Möglichkeit 1
+\end{itemize}
+Nachteile der Lösung:
+\begin{itemize}
+  \item Login und Erstellen von Beiträgen müssen auf dem Smartphone simuliert
+  werden
+  \item Ausfall der API bedeutet Ausfall der App
+  \item Es fallen Kosten für das Hosting des Servers an auf dem die API läuft
+\end{itemize}
+\subsection{Auswahl der Lösungsmöglichkeit}
+Trotz Kosten durch das Hosting des Servers, fiel die Entscheidung auf die
+Entwicklung einer eigenen API. Der hohe Datenverbrauch und vor allem die hohen
+Ladezeiten bei der Verwendung einer WebView waren ausschlaggebend für die
+Entscheidung. Diese Ladezeiten hätten die Usability vor allem bei mobilen
+Datenverbindungen stark gesenkt. Daher wurde auf eine leichtgewichtige App mit
+nativen Android Komponenten gesetzt, die über eine selbst entwickelte API nur
+die nötigsten Daten zur Anzeige des Forums bereitgestellt bekommt. Der
+Datenverbrauch und die Ladezeiten werden dadurch auf ein Minimum beschränkt.
 \section{Eingesetzte Technologien}
 \subsection{Jsoup}
 Um die Informationen im readmore.de Forum, also verschiedene Foren und Beiträge,
@@ -208,14 +286,6 @@ Zu den wichtigsten Funktionen zählen:
   \item korrekte Darstellung des im Forum verwendeten BBCode, also der
   Formatierung für Zitate, Formatierung, Bilder und Links in den Beiträgen
 \end{itemize}
-Die höchste Priorität hat logischerweise das Lesen des Forums. Die Foren,
-Threads und Beiträge sollen in drei unterschiedlichen Listen angezeigt werden.
-Wird auf ein Eintrag in der Liste der Foren geklickt soll die entsprechende
-Liste mit den Threads angezeigt werden. Ein Klick auf einen Thread soll die
-Beiträge der ersten Seite des gewählten Threads darstellen. Außerdem sollen
-innerhalb eines Threads die verfügbaren Seiten auswählbar sein. Die Darstellung
-soll mit nativen Android Komponenten erfolgen.
-Nachfolgende Grafik stellt das gewünschte Verhalten dar:
 \begin{figure*}[!htbp]
 \centering
 \includegraphics[width=\textwidth]{Bilder/mockups_oberflaeche.png}
@@ -223,6 +293,13 @@ Nachfolgende Grafik stellt das gewünschte Verhalten dar:
 \protect\footnote{eigene Darstellung.} }
 \label{dminfo}
 \end{figure*}
+Die höchste Priorität hat logischerweise das Lesen des Forums. Die Foren,
+Threads und Beiträge sollen in drei unterschiedlichen Listen angezeigt werden.
+Wird auf ein Eintrag in der Liste der Foren geklickt soll die entsprechende
+Liste mit den Threads angezeigt werden. Ein Klick auf einen Thread soll die
+Beiträge der ersten Seite des gewählten Threads darstellen. Außerdem sollen
+innerhalb eines Threads die verfügbaren Seiten auswählbar sein. Die Darstellung
+soll mit nativen Android Komponenten erfolgen.
 Die Mockups enthalten in der Forenübersicht und der Threadübersicht jeweils
 normal gedruckte Titel und fett gedruckte Titel. Falls der Benutzer in der App
 eingeloggt ist, sollen fett gedruckte Titel ungelesene Threads oder Beiträge

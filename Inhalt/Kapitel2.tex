@@ -109,7 +109,54 @@ angegeben werden.
 \centering
 \includegraphics[width=\textwidth]{Bilder/server.png}
 \caption[Architektur der REST-Schnittstelle]{Architektur der REST-Schnittstelle \protect\footnote{eigene Darstellung.} }
-\label{dminfo}
+\label{restuml}
 \end{figure*}
+Die beschriebenen Anfragen werden in der Hauptklasse des Servers auf
+entsprechende \Fachbegriff{Restlets} weitergeleitet, d.h. jede Anfrage 
+\Code{/forum}, \Code{/threads} und \Code{/beitrag} wird auf ein eigenes Restlet
+weitergeleitet. Dort wird der ankommende GET Request bearbeitet und die
+entsprechende Antwort zurückgegeben. Wie im UML Diagramm \ref{restuml} zu sehen,
+sind dafür die Restlets \Code{ThreadsRestlet}, \Code{BeitragRestlet} und
+\Code{ForumRestlet} zuständig. 
+\begin{lstlisting}[caption=Routing der Restlets, label=routing]
+public Restlet createInboundRoot() {
+  Router router = new Router(getContext());
+  router.attach("/threads", threadsRestlet);
+  router.attach("/forum", forumRestlet);
+  router.attach("/beitrag", beitragRestlet);
+  return router;
+}
+\end{lstlisting}
+Wird eine Anfrage an ein Restlet weitergeleitet, wird im Restlet automatisch die
+Methode \Code{handle(Request, Response)} aufgerufen. Diese bekommt den Request und eine
+Response um eine Antwort zu generieren. Nachfolgend das ForumRestlet als
+Beispiel wie die Rückgabe der Forenliste funktioniert.
+\begin{lstlisting}[caption=Funktionsweise des ForumRestlet, label=forumrestlet]
+public class ForumRestlet extends Restlet {
 
+	@Override
+    public void handle(Request request, Response response) {
+		List<Forum> forum = getForum();
+        String message = null;
+        Gson gson = new Gson();
+        message = gson.toJson(forum);
+        response.setEntity(message, MediaType.TEXT_PLAIN);
+    }
+    
+	private List<Forum> getForum() {
+		ForenParser tp = new ForenParser();
+		return tp.getForen();
+	}
+}
+\end{lstlisting}
+Um eine Liste aller Foren zu erhalten, wird zuerst der \Code{ForenParser}
+aufgerufen. Diese Liste wird mithilfe des Frameworks \Fachbegriff{Gson} in ein
+JSON Array umgewandelt. \Fachbegriff{Gson} bildet dabei alle Attribute des Java
+Objekt in einem Json Objekt ab. Abschließend wird die JSON Nachricht in die HTTP
+Response geschrieben. Das JSON Array enthält Forum Objekte im
+nachfolgenden Format. 
+\begin{lstlisting}[caption=Format der Forum Objekte,label=jsonforum] 
+{"titel":"Hardware","id":10,"idKategorie":91,
+"beschreibung":"Ecke fuer Technikinteressierte"}
+\end{lstlisting}
 \section{Implementierung der App}
