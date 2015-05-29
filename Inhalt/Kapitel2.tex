@@ -160,3 +160,57 @@ nachfolgenden Format.
 "beschreibung":"Ecke fuer Technikinteressierte"}
 \end{lstlisting}
 \section{Implementierung der App}
+Die Oberfläche der App besteht aus vier verschiedenen Acitivites. Einer Activity
+für den Login, eine um die Forenübersicht darzustellen, eine um die Threads des
+gewählten Forums darzustellen und eine Activity um den Thread selbst, also die
+Beiträge im Thread, darzustellen. 
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{Bilder/activities.png}
+\caption[Oberflächen der App]{Oberflächen der App
+\protect\footnote{eigene Darstellung.} }
+\label{restuml}
+\end{figure*}
+Die Übersichten für Foren, Threads und Beiträge werden in einer Android
+\Code{ListView} dargestellt. Da Netzwerkoperationen in Android Applikationen
+immer einen eigenen Thread benötigen, besitzen alle Activities einen
+\Code{AsyncTask} der diese Operationen in der Methode
+\Code{doInBackground()}durchführt.\\
+Die \Code{LoginActivity} benötigt den \Code{AsyncTask} um den Login über
+readmore.de durchzuführen. Dort wird mithilfe des \Fachbegriff{Apache HTTP
+Client} ein POST mit den Logindaten durchgeführt. Der HTTP Client verwaltet
+anschließend automatisch alle Cookies, die später zum erstellen von Beiträgen
+benötigt werden. 
+\begin{lstlisting}[caption=Durchführen des Login POST]
+HttpPost post = new HttpPost(login);
+post.setEntity(new UrlEncodedFormEntity(loginParams, "UTF-8"));
+HttpResponse response = client.execute(post);
+\end{lstlisting}
+Der Quellcode zeigt wie ein POST mit dem Apache HTTP Client durchgeführt wird.
+Der String \Code{login} enthält die URL der readmore.de Login Seite. \\
+Die Activities zur Anzeige der Forendaten rufen in ihrem \Code{AsyncTask} die
+Informationen der API ab. Diese werden in Java Objekte umgewandelt und dem
+Adapter der jeweiligen \Code{ListView} weitergegeben. Jede \Code{ListView}
+besitzt einen eigenen Adapter für den jeweiligen Datentyp Forum, Thread oder
+Beitrag. Dieser Adapter steuert wie die Informationen in der Liste angezeigt
+werden und gibt beim Klick auf ein Item in der Liste das entsprechende Java
+Objekt zurück.
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{Bilder/adapter.png}
+\caption[Adapter für die unterschiedlichen Datentypen]{Adapter für die unterschiedlichen Datentypen
+\protect\footnote{eigene Darstellung.} }
+\label{restuml}
+\end{figure*}
+Um dem Benutzer die Möglichkeit zu geben die Übersichten nach Wunsch zu
+aktualisieren wurde eine \Fachbegriff{PullToRefresh} Logik verbaut. Das bedeutet
+sobald der Benutzer am oberen Ende der List nach unten zieht, wird die Liste
+aktualisiert. Dazu wird erneut der \Code{AsyncTask} ausgeführt. Diese
+\Fachbegriff{PullToRefresh} Logik wird mit dem aktuellen Android SDK
+mitgeliefert und nennt sich \Code{SwipeRefreshLayout}. 
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{Bilder/screen_gesamt.png}
+\caption[Screenshot der drei Übersichten]{Screenshot der drei Übersichten \protect\footnote{eigene Darstellung.} }
+\label{restuml}
+\end{figure*}
