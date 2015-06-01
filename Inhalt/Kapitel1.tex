@@ -128,9 +128,9 @@ Um die Informationen im readmore.de Forum, also verschiedene Foren und Beiträge
 auszulesen, wird die Java Bibliothek \Fachbegriff{jsoup} auf der
 Serverseite eingesetzt.
 \Fachbegriff{jsoup} ist eine Bibliothek mit der es möglich ist, HTML Dateien zu
-parsen und die enthaltenen Informationen zu extrahieren. \Fachbegriff{jsoup}
-bietet hierzu die Möglichkeit die Baumstruktur des eingelesenen HTML Dokuments
-zu durchlaufen und beispielsweise nach bestimmten Attributen zu filtern. Dazu
+parsen und die enthaltenen Informationen zu
+extrahieren.\footnote{Quelle: http://jsoup.org/cookbook/} \Fachbegriff{jsoup}
+bietet hierzu die Möglichkeit die Baumstruktur des eingelesenen HTML Dokuments zu durchlaufen und beispielsweise nach bestimmten Attributen zu filtern. Dazu
 bietet die Bibliothek mit der sogenannten \Fachbegriff{Selektor Syntax} eine
 Manipulationssprache um bestimmte Elemente im \Fachbegriff{DOM} des HTML
 Dokument zu selektieren. Ein \Fachbegriff{DOM} ist in diesem Kontext die 
@@ -140,8 +140,8 @@ Damit der Server auch von außen über HTTP Requests erreichbar ist, wurde das
 Framework \Fachbegriff{Restlet} eingesetzt um eine \Fachbegriff{RESTful}
 Serverkomponente bereit zu stellen. Das Programmierparadigma Representational
 State Transfer (kurz: REST) beschreibt eine Serverkomponente die lediglich
-unveränderte Seiteninhalte zum Abruf bereitstellt. Die Kommunikation mit dieser
-Serverkomponente erfolgt über verschiedene HTTP-Methoden. Um beispielsweise
+unveränderte Seiteninhalte zum Abruf bereitstellt\footnote{Quelle:
+http://restlet.com/products/restlet-framework/features/}. Die Kommunikation mit dieser Serverkomponente erfolgt über verschiedene HTTP-Methoden. Um beispielsweise
 Daten vom Server abzurufen wird die Methode \Fachbegriff{GET} verwendet. Der Zustand am Server
 wird dadurch nicht verändert. Restlet bringt eine fertige Serverkomponente mit
 die nur noch an einem Port registriert werden muss. Über einen
